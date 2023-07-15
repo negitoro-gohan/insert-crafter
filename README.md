@@ -4,7 +4,7 @@ SQLServerのテーブルのデータをINSERT文として出力します
 ### Arguments
 
 ```
-usage: CreateScripter
+usage: insert-crafter
 	 {-server サーバ名}
 	 {-db データベース名}
 	 [-user ユーザ名]
