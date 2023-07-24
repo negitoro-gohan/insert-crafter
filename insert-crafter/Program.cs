@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Common;
+using Microsoft.IdentityModel.Tokens;
 
 namespace insert_crafter
 {
@@ -27,17 +28,7 @@ namespace insert_crafter
                 Console.WriteLine("データベースを指定してください。");
                 return;
             }
-            if (String.IsNullOrEmpty(user))
-            {
-                Console.WriteLine("ユーザーを指定してください。");
-                return;
-            }
-            if (String.IsNullOrEmpty(pass))
-            {
-                Console.WriteLine("パスワードを指定してください。");
-                return;
-            }
-
+           
             try
             {
                  CreateScript(server, db, user, pass, obj);
@@ -66,10 +57,18 @@ namespace insert_crafter
         {
 
             ServerConnection srvConn = new ServerConnection();
-            srvConn.ServerInstance = serverInstance;   // connects to named instance  
-            srvConn.LoginSecure = false;   // set to true for Windows Authentication  
-            srvConn.Login = login;
-            srvConn.Password = password;
+            srvConn.ServerInstance = serverInstance;   // connects to named instance
+            if(login.IsNullOrEmpty() || password.IsNullOrEmpty())
+            {
+                srvConn.LoginSecure = true;
+            }
+            else
+            {
+                srvConn.LoginSecure = false;   // set to true for Windows Authentication  
+                srvConn.Login = login;
+                srvConn.Password = password;
+            }
+    
             Server srv = new Server(srvConn);
 
             // Reference the database.    
